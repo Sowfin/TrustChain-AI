@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Sign In | trustchainAI</title>
+  <style>
+    :root {
+      --bg: #040607;
+      --panel: rgba(11, 9, 24, 0.84);
+      --panel-strong: rgba(16, 13, 33, 0.94);
+      --border: rgba(191, 64, 250, 0.28);
+      --text: #f4ebff;
+      --muted: #b8add0;
+      --accent: #bf40fa;
+      --accent-2: #4928c2;
+      --accent-3: #e3d9fc;
+      --cyan: #5ecbff;
+      --shadow: rgba(191, 64, 250, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(227, 217, 252, 0.16), transparent 20%),
+        radial-gradient(circle at 80% 20%, rgba(191, 64, 250, 0.25), transparent 28%),
+        linear-gradient(135deg, #040607 0%, #090a1c 40%, #140d28 100%);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 100%);
+      pointer-events: none;
+    }
+
+    .shell {
+      width: min(480px, 100%);
+      display: flex;
+      justify-content: center;
+    }
+
+    .form-card {
+      width: 100%;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(12, 10, 24, 0.95), rgba(8, 7, 18, 0.9));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .form-header {
+      margin-bottom: 24px;
+    }
+
+    .form-header h2 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
+
+    .form-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .role-tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(191, 64, 250, 0.16);
+      color: var(--accent-3);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-3);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .field input:focus {
+      border-color: rgba(191, 64, 250, 0.8);
+      box-shadow: 0 0 0 4px rgba(191, 64, 250, 0.14);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .field input::placeholder { color: #8a84a6; }
+
+    .signin-fields {
+      display: grid;
+      gap: 14px;
+    }
+
+    .signin-fields.hidden {
+      display: none;
+    }
+
+    .extra-fields {
+      display: none;
+      gap: 14px;
+      margin-top: 2px;
+    }
+
+    .extra-fields.active {
+      display: grid;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 4px 0 4px;
+    }
+
+    .checkbox-row a {
+      color: var(--accent-3);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    button {
+      margin-top: 6px;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 16px 36px rgba(73, 40, 194, 0.28);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 44px rgba(191, 64, 250, 0.3);
+    }
+
+    .meta {
+      margin-top: 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta a {
+      color: var(--accent-3);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 560px) {
+      .form-card { padding: 24px; }
+      .toggle-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="form-card" aria-label="Login form">
+      <div class="form-header">
+        <h2>Welcome</h2>
+        <p>Sign in to continue or create a new account in seconds.</p>
+        <span class="role-tag" id="roleLabel">User access</span>
+      </div>
+
+      <form id="loginForm">
+        <div class="signin-fields" id="signinFields">
+          <div class="field">
+            <label for="identifier">Username or email</label>
+            <input id="identifier" name="identifier" type="text" placeholder="Enter your username or email" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Enter your password" />
+          </div>
+        </div>
+
+        <div class="extra-fields" id="extraFields">
+          <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" placeholder="Choose a username" />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" placeholder="Enter your phone number" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="name@company.com" />
+          </div>
+
+          <div class="field">
+            <label for="createPassword">Password</label>
+            <input id="createPassword" name="createPassword" type="password" placeholder="Create a password" />
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <label><input type="checkbox" /> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="submitButton">Sign in securely</button>
+      </form>
+
+      <p class="meta">Don't have an account? <a href="#" id="signUpLink">Sign up</a></p>
+    </section>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || 'user';
+    const roleLabel = document.getElementById('roleLabel');
+    const signinFields = document.getElementById('signinFields');
+    const extraFields = document.getElementById('extraFields');
+    const submitButton = document.getElementById('submitButton');
+    const identifierInput = document.getElementById('identifier');
+    const passwordInput = document.getElementById('password');
+    const signUpLink = document.getElementById('signUpLink');
+    const form = document.getElementById('loginForm');
+
+    const isManufacturer = role === 'manufacturer';
+    roleLabel.textContent = isManufacturer ? 'Manufacturer access' : 'User access';
+
+    let creatingAccount = false;
+
+    function toggleCreateAccount() {
+      creatingAccount = !creatingAccount;
+      signinFields.classList.toggle('hidden', creatingAccount);
+      extraFields.classList.toggle('active', creatingAccount);
+      submitButton.textContent = creatingAccount ? 'Create account' : 'Sign in securely';
+      signUpLink.textContent = creatingAccount ? 'Back to sign in' : 'Sign up';
+    }
+
+    signUpLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      toggleCreateAccount();
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const identifier = identifierInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!identifier || !password) {
+        alert('Please enter your username or email and password.');
+        return;
+      }
+
+      if (creatingAccount) {
+        const username = document.getElementById('username').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const createPassword = document.getElementById('createPassword').value;
+
+        if (!username || !phone || !email || !createPassword) {
+          alert('Please complete your username, phone number, email, and password.');
+          return;
+        }
+
+        alert(`Account created for ${username}. Welcome to trustchainAI.`);
+        return;
+      }
+
+      alert(`Welcome back, ${identifier}!`);
+    });
+  </script>
+</body>
+</html>
