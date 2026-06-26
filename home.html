@@ -240,9 +240,9 @@
       position: relative;
       z-index: 2;
       display: grid;
-      grid-template-columns: minmax(300px, 0.84fr) minmax(360px, 1.16fr);
+      grid-template-columns: minmax(300px, 0.78fr) minmax(390px, 1.22fr);
       align-items: center;
-      gap: clamp(24px, 4vw, 62px);
+      gap: clamp(22px, 3.4vw, 52px);
       width: min(1220px, 100%);
       min-height: calc(100vh - clamp(36px, 6vw, 88px));
       margin: 0 auto;
@@ -315,12 +315,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 220px;
-      min-height: 52px;
-      padding: 0 22px;
+      min-width: 232px;
+      min-height: 60px;
+      padding: 0 30px;
       border-radius: 999px;
       color: #fff;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 900;
       text-decoration: none;
       transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
@@ -341,18 +341,22 @@
     }
 
     .trust-strip {
+      position: absolute;
+      z-index: 6;
+      left: 50%;
+      bottom: 0;
+      width: min(680px, 100%);
+      transform: translateX(-50%);
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      max-width: 640px;
-      margin-top: 26px;
     }
 
     .metric {
-      min-height: 82px;
-      padding: 13px;
+      min-height: 78px;
+      padding: 12px;
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 16px;
       background: rgba(12, 1, 28, 0.68);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(14px);
@@ -381,7 +385,7 @@
 
     .hero-art {
       position: relative;
-      min-height: clamp(370px, 46vw, 540px);
+      min-height: clamp(520px, 48vw, 610px);
       perspective: 1200px;
     }
 
@@ -400,9 +404,9 @@
     .earth-wrap {
       position: absolute;
       z-index: 5;
-      left: 49%;
-      top: 9%;
-      width: min(238px, 27vw);
+      left: 45%;
+      top: 7%;
+      width: min(210px, 22vw);
       aspect-ratio: 1;
       transform: translateX(-50%);
       animation: earthFloat 5.5s ease-in-out infinite;
@@ -476,9 +480,9 @@
     .hand-wrap {
       position: absolute;
       z-index: 4;
-      left: 68%;
-      bottom: -1%;
-      width: min(680px, 61vw);
+      left: 66%;
+      bottom: 16%;
+      width: min(710px, 63vw);
       transform: translateX(-50%) rotateX(5deg);
       transform-style: preserve-3d;
     }
@@ -642,7 +646,7 @@
 
       .hero-art {
         order: -1;
-        min-height: 470px;
+        min-height: 560px;
       }
 
       .hero-copy,
@@ -652,6 +656,12 @@
 
       .trust-strip {
         grid-template-columns: 1fr;
+        position: relative;
+        left: auto;
+        bottom: auto;
+        transform: none;
+        width: 100%;
+        margin-top: 18px;
       }
     }
 
@@ -671,16 +681,18 @@
       }
 
       .hero-art {
-        min-height: 370px;
+        min-height: 500px;
       }
 
       .earth-wrap {
-        width: 190px;
+        left: 45%;
+        width: 154px;
       }
 
       .hand-wrap {
-        width: 560px;
-        left: 68%;
+        width: 520px;
+        left: 66%;
+        bottom: 30%;
       }
 
       .hero-tools a {
@@ -712,23 +724,8 @@
         </p>
 
         <div class="hero-tools" aria-label="Primary actions">
-          <a class="primary-link" href="login.html?role=user">Login as user</a>
-          <a class="secondary-link" href="login.html?role=manufacturer">Login as manufacturer</a>
-        </div>
-
-        <div class="trust-strip" aria-label="Trustchain platform highlights">
-          <div class="metric">
-            <strong>01</strong>
-            <span>Manufacturer identity secured before product release</span>
-          </div>
-          <div class="metric">
-            <strong>AI</strong>
-            <span>Pattern checks for suspicious counterfeit signals</span>
-          </div>
-          <div class="metric">
-            <strong>24/7</strong>
-            <span>Customer proof lookup from anywhere in the world</span>
-          </div>
+          <a class="primary-link" href="login.html?role=user">User</a>
+          <a class="secondary-link" href="login.html?role=manufacturer">Manufacture</a>
         </div>
       </section>
 
@@ -753,6 +750,21 @@
             <span class="finger three"></span>
             <span class="finger four"></span>
             <span class="thumb"></span>
+          </div>
+        </div>
+
+        <div class="trust-strip" aria-label="Trustchain platform highlights">
+          <div class="metric">
+            <strong>01</strong>
+            <span>Manufacturer identity secured before product release</span>
+          </div>
+          <div class="metric">
+            <strong>AI</strong>
+            <span>Pattern checks for suspicious counterfeit signals</span>
+          </div>
+          <div class="metric">
+            <strong>24/7</strong>
+            <span>Customer proof lookup from anywhere in the world</span>
           </div>
         </div>
       </section>
